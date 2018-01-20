@@ -1,43 +1,92 @@
-cask_args appdir: '/Applications'
-
-tap 'homebrew/bundle'
-tap 'puma/puma'
-
-brew 'ack'
-brew 'coreutils'
-brew 'go'
-brew 'grc'
-brew 'imagemagick'
-brew 'jp2a'
-brew 'jq'
-brew 'libcaca', args: ['with-imlib2']
-brew 'libgit2'
-brew 'openssl'
-brew 'node'
-brew 'readline'
-brew 'postgresql'
-brew 'puma/puma/puma-dev'
-brew 'ruby-build'
-brew 'rbenv'
-brew 'roundup'
-brew 'spaceman-diff'
-brew 'spark'
-brew 'unrar'
-brew 'wget'
-brew 'yarn'
-brew 'youtube-dl'
-
-cask '1password'
-cask 'adium'
-cask 'atom'
+# Browsers
 cask 'firefox'
-cask 'garmin-express'
 cask 'google-chrome'
-cask 'handbrake'
-cask 'mapbox-studio'
-cask 'seashore'
+cask 'opera'
+
+# Terminals
+cask 'iterm2'
+brew 'tmux'
+
+# Shells
+brew 'bash'
+brew 'bash-completion'
+brew 'zsh'
+
+# Editors
+brew 'vim'
+cask 'macvim'
+cask 'emacs'
+cask 'sublime-text'
+
+# Download
+brew 'curl'
+brew 'wget'
+
+# Version control
+brew 'git'
+brew 'git-cola'
+cask 'gitup'
+
+# https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/
+# Basic file, shell and text manipulation utilities of the GNU operating system.
+brew 'coreutils'
+
+brew 'binutils'
+brew 'diffutils'
+brew 'ed'
+brew 'findutils'
+brew 'gawk'
+brew 'gnu-indent'
+brew 'gnu-sed'
+brew 'gnu-tar'
+brew 'gnu-which'
+brew 'gnutls'
+brew 'gzip'
+brew 'watch'
+brew 'wdiff'
+
+##
+# Some GNU command line tools already exist by default on OS X.
+# We choose to replace these with newer versions.
+##
+
+brew 'gdb'  # gdb requires further actions to make it work. See `brew info gdb`.
+brew 'gpatch'
+brew 'less'
+brew 'm4'
+brew 'make'
+brew 'nano'
+
+
+# File compression/uncompression
+brew 'zstd'
+brew 'unrar'
+brew 'unzip'
+##
+
+# file synchronizer.
+brew 'rsync'
+
+# Text search
+brew 'grep'
+brew 'jq'
+
+# Docker software containers to help distribute applications.
+brew 'docker'
+brew 'docker-machine'
+brew 'xhyve'
+brew 'docker-machine-driver-xhyve'
+
+## Uncategorized
+brew 'base64'
+cask 'spotify'
+cask 'java'
+brew 'go'
+brew 'gradle'
+brew 'maven'
+brew 'python'
+brew 'python3'
+cask 'intellij-idea'
+brew 'ansible'
 cask 'slack'
-cask 'steam'
-cask 'transmission'
-cask 'tunnelbear'
-cask 'vlc'
+brew 'kubectl'
