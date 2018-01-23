@@ -93,4 +93,5 @@ brew 'ansible'
 cask 'slack'
 cask 'minikube'	
 brew 'kubectl'
+brew 'glide'
 
