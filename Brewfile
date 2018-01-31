@@ -94,4 +94,6 @@ cask 'slack'
 cask 'minikube'	
 brew 'kubectl'
 brew 'glide'
-
+brew 'kubectx' 
+tap 'boz/repo'
+brew 'boz/repo/kail'
