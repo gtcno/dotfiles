@@ -62,7 +62,6 @@ brew 'nano'
 brew 'zstd'
 brew 'unrar'
 brew 'unzip'
-##
 
 # file synchronizer.
 brew 'rsync'
@@ -76,6 +75,11 @@ brew 'docker'
 brew 'docker-machine'
 brew 'xhyve'
 brew 'docker-machine-driver-xhyve'
+
+
+## Programming 
+tap 'codeclimate/formulae'
+brew 'codeclimate'
 
 ## Uncategorized
 brew 'base64'
