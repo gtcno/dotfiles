@@ -75,6 +75,8 @@ brew 'docker'
 brew 'docker-machine'
 brew 'xhyve'
 brew 'docker-machine-driver-xhyve'
+cask 'osxfuse'
+brew 'sshfs'
 
 
 ## Programming 
@@ -83,9 +85,9 @@ brew 'codeclimate'
 
 ## Uncategorized
 brew 'base64'
-cask 'spotify'
-cask 'java'
-cask 'java8'
+#cask 'spotify'
+#cask 'java'
+#cask 'java8'
 brew 'jenv'
 brew 'go'
 brew 'gradle'
@@ -104,3 +106,4 @@ brew 'boz/repo/kail'
 brew 'kubernetes-helm'
 brew 'landscaper'
 brew 'dep'
+brew 'terraform'

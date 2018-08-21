@@ -237,3 +237,19 @@ ZSH_THEME_GIT_PROMPT_CLEAN=") %{$fg_bold[green]%}✔ "
 ZSH_THEME_GIT_PROMPT_DIRTY=") %{$fg_bold[yellow]%}✗ "
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[cyan]%}("
 SH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+
+# Updates editor information when the keymap changes.
+function zle-keymap-select() {
+  zle reset-prompt
+  zle -R
+}
+
+zle -N zle-keymap-select
+
+function vi_mode_prompt_info() {
+  echo "${${KEYMAP/vicmd/[% NORMAL]%}/(main|viins)/[% INSERT]%}"
+}
+
+# define right prompt, regardless of whether the theme defined it
+RPS1='$(vi_mode_prompt_info)'
+RPS2=$RPS1

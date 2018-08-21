@@ -54,3 +54,22 @@ if [ -f '/Users/giaocung/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/g
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/giaocung/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/giaocung/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Use vi mode
+bindkey -v
+
+# Vi mode settings
+# Better searching in command mode
+bindkey -M vicmd '?' history-incremental-search-backward
+bindkey -M vicmd '/' history-incremental-search-forward
+
+bindkey -M vicmd "k" up-line-or-beginning-search
+bindkey -M vicmd "j" down-line-or-beginning-search
+
+# Easier, more vim-like editor opening
+# `v` is already mapped to visual mode, so we need to use a different key to
+# open Vim
+bindkey -M vicmd "^V" edit-command-line
+
+# Make Vi mode transitions faster (KEYTIMEOUT is in hundredths of a second)
+export KEYTIMEOUT=1
