@@ -1,9 +1,4 @@
-alias k=kubectl
-
-alias mk="minikube"
-alias mks="minikube --vm-driver=xhyve --kubernetes-version v1.9.0 start"
+alias k='HTTPS_PROXY="socks5://localhost:14122" NO_PROXY=".microsoftonline.com" kubectl'
 alias kx="kubectx"
 alias kns="kubens"
-alias ks="kubectl -n kube-system"
-alias kn="kubectl -n nais"
 
