@@ -1,1 +1,1 @@
-export KUBECONFIG=$HOME/.kube/config:/Users/giaocung/dev/sandboxes/kubeconfigs/config
+export KUBECONFIG=$HOME/.kube/config:/Users/giacung/dev/sandboxes/kubeconfigs/config
