@@ -71,12 +71,12 @@ brew 'grep'
 brew 'jq'
 
 # Docker software containers to help distribute applications.
-brew 'docker'
-brew 'docker-machine'
-brew 'xhyve'
-brew 'docker-machine-driver-xhyve'
-cask 'osxfuse'
-brew 'sshfs'
+#brew 'docker'
+#brew 'docker-machine'
+#brew 'xhyve'
+#brew 'docker-machine-driver-xhyve'
+#cask 'osxfuse'
+#brew 'sshfs'
 
 
 ## Programming 
