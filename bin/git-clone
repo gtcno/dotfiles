@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Clone a repo using https
+
+git clone https://github.com/$1.git

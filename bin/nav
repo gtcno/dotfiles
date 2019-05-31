@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+#
+
+export VAULT_ADDR=https://vault.adeo.no
+export USER=C150660
+
+

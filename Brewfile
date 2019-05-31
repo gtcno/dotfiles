@@ -1,6 +1,5 @@
 # Browsers
 cask 'firefox'
-cask 'google-chrome'
 cask 'opera'
 
 # Terminals
@@ -90,8 +89,6 @@ brew 'base64'
 cask 'java8'
 brew 'jenv'
 brew 'go'
-brew 'gradle'
-brew 'maven'
 brew 'python'
 brew 'python3'
 cask 'intellij-idea'
@@ -105,5 +102,6 @@ tap 'boz/repo'
 brew 'boz/repo/kail'
 brew 'kubernetes-helm'
 brew 'dep'
-brew 'terraform'
+brew 'terraform@0.11'
 brew 'azure-cli'
+brew 'repo'
