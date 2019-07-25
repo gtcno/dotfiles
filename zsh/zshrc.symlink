@@ -74,6 +74,9 @@ bindkey -M vicmd "^V" edit-command-line
 # Make Vi mode transitions faster (KEYTIMEOUT is in hundredths of a second)
 export KEYTIMEOUT=1
 
+#VAULT
+export VAULT_ADDR=https://vault.adeo.no
+
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/giacung/.sdkman"
 [[ -s "/Users/giacung/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/giacung/.sdkman/bin/sdkman-init.sh"
