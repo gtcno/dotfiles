@@ -33,3 +33,7 @@
         default = simple
 [cola]
 	spellcheck = false
+[http "https://stash.adeo.no"]
+    proxy = socks5://localhost:14122
+[https "https://stash.adeo.no"]
+    proxy = socks5://localhost:14122
