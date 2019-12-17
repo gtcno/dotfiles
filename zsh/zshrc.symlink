@@ -49,12 +49,6 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/giacung/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/giacung/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/giacung/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/giacung/google-cloud-sdk/completion.zsh.inc'; fi
-
 # Use vi mode
 bindkey -v
 
@@ -74,9 +68,3 @@ bindkey -M vicmd "^V" edit-command-line
 # Make Vi mode transitions faster (KEYTIMEOUT is in hundredths of a second)
 export KEYTIMEOUT=1
 
-#VAULT
-export VAULT_ADDR=https://vault.adeo.no
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/giacung/.sdkman"
-[[ -s "/Users/giacung/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/giacung/.sdkman/bin/sdkman-init.sh"
