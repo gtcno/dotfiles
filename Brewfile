@@ -49,7 +49,6 @@ brew 'wdiff'
 # Some GNU command line tools already exist by default on OS X.
 # We choose to replace these with newer versions.
 ##
-
 brew 'gdb'  # gdb requires further actions to make it work. See `brew info gdb`.
 brew 'gpatch'
 brew 'less'
