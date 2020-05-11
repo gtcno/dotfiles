@@ -16,6 +16,7 @@ brew 'vim'
 cask 'macvim'
 cask 'emacs'
 cask 'sublime-text'
+cask 'android-studio'
 
 # Download
 brew 'curl'
