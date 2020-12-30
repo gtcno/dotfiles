@@ -1,0 +1,7 @@
+set visualbell
+set noerrorbells
+set surround
+set commentary
+set ReplaceWithRegister
+set argtextobj
+set highlightedyank
