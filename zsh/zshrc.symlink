@@ -80,3 +80,6 @@ if [ -f '/Users/giaocung/Downloads/google-cloud-sdk 2/path.zsh.inc' ]; then . '/
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/giaocung/Downloads/google-cloud-sdk 2/completion.zsh.inc' ]; then . '/Users/giaocung/Downloads/google-cloud-sdk 2/completion.zsh.inc'; fi
+
+
+. /usr/local/opt/asdf/asdf.sh

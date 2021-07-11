@@ -1,7 +1,12 @@
-set visualbell
-set noerrorbells
+
+""" Map leader to space ---------------------
+let mapleader=" "
+
+""" Plugins  --------------------------------
 set surround
-set commentary
-set ReplaceWithRegister
 set argtextobj
+set ReplaceWithRegister
 set highlightedyank
+set easymotion
+
+nnoremap <silent> <S-"> :reg
