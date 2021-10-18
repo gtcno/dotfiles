@@ -1,3 +1,6 @@
+autoload -U +X bashcompinit && bashcompinit
+autoload -U +X compinit && compinit
+
 export LSCOLORS="exfxcxdxbxegedabagacad"
 export CLICOLOR=true
 export EDITOR="vi"
