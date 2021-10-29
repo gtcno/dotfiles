@@ -1,9 +1,10 @@
 # Browsers
 cask 'firefox'
-cask 'opera'
+#cask 'googl-chrome'
 
 # Terminals
 cask 'iterm2'
+cask 'kitty'
 brew 'tmux'
 
 # Shells
@@ -13,10 +14,10 @@ brew 'zsh'
 
 # Editors
 brew 'vim'
-cask 'macvim'
+#cask 'macvim'
 #cask 'emacs'
-cask 'sublime-text'
-cask 'android-studio'
+#cask 'sublime-text'
+#cask 'android-studio'
 
 # Download
 brew 'curl'
@@ -24,8 +25,8 @@ brew 'wget'
 
 # Version control
 brew 'git'
-brew 'git-cola'
-cask 'gitup'
+brew 'gh'
+brew 'tig'
 
 # https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/
 # Basic file, shell and text manipulation utilities of the GNU operating system.
@@ -80,23 +81,14 @@ brew 'jq'
 
 ## Uncategorized
 brew 'base64'
-brew 'jenv'
-brew 'go'
-brew 'python'
-brew 'python3'
-cask 'intellij-idea'
-brew 'ansible'
 cask 'slack'
 brew 'kubectl'
-brew 'glide'
 brew 'kubectx' 
 tap 'boz/repo'
 brew 'boz/repo/kail'
-brew 'kubernetes-helm'
 brew 'dep'
-#brew 'terraform@0.12.29'
-brew 'azure-cli'
-#brew 'repo'
-#rew 'npm'
-#rew 'nvm'
+brew 'repo'
+brew 'npm'
+brew 'nvm'
 brew 'kube-ps1'
+cask 'google-cloud-sdk'
