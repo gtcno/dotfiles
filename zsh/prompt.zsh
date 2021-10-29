@@ -1,255 +1,176 @@
+# -*- mode: sh; -*-
 # Dracula Theme v1.2.5
 #
 # https://github.com/dracula/dracula-theme
-#
-# Copyright 2016, All rights reserved
+# # Copyright 2019, All rights reserved
 #
 # Code licensed under the MIT license
 # http://zenorocha.mit-license.org
 #
 # @author Zeno Rocha <hi@zenorocha.com>
-# Outputs current branch info in prompt format
+# @maintainer Aidan Williams <aidanwillie0317@protonmail.com>
 
-autoload -U colors && colors
-function git_prompt_info() {
-  local ref
-  if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
-    ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
-    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+# Initialization {{{
+source ${0:A:h}/lib/async.zsh
+autoload -Uz add-zsh-hook
+setopt PROMPT_SUBST
+async_init
+# }}}
+
+export LC_ALL=en_US.UTF-8 
+# Options {{{
+# Set to 1 to show the date
+DRACULA_DISPLAY_TIME=${DRACULA_DISPLAY_TIME:-0}
+
+# Set to 1 to show the 'context' segment
+DRACULA_DISPLAY_CONTEXT=${DRACULA_DISPLAY_CONTEXT:-0}
+
+# Changes the arrow icon
+DRACULA_ARROW_ICON=${DRACULA_ARROW_ICON:-➜}
+
+# function to detect if git has support for --no-optional-locks
+dracula_test_git_optional_lock() {
+  local git_version=${DEBUG_OVERRIDE_V:-"$(git version | cut -d' ' -f3)"}
+  local git_version="$(git version | cut -d' ' -f3)"
+  # test for git versions < 2.14.0
+  case "$git_version" in
+    [0-1].*)
+      echo 0
+      return 1
+      ;;
+    2.[0-9].*)
+      echo 0
+      return 1
+      ;;
+    2.1[0-3].*)
+      echo 0
+      return 1
+      ;;
+  esac
+
+  # if version > 2.14.0 return true
+  echo 1
+}
+
+# use --no-optional-locks flag on git
+DRACULA_GIT_NOLOCK=${DRACULA_GIT_NOLOCK:-$(dracula_test_git_optional_lock)}
+# }}}
+
+# Status segment {{{
+# arrow is green if last command was successful, red if not, 
+# turns yellow in vi command mode
+PROMPT='%(1V:%F{yellow}:%(?:%F{green}:%F{red}))${DRACULA_ARROW_ICON}'
+# }}}
+
+# Time segment {{{
+dracula_time_segment() {
+  if (( DRACULA_DISPLAY_TIME )); then
+    if [[ -z "$TIME_FORMAT" ]]; then
+      TIME_FORMAT=" %-H:%M"
+      
+      # check if locale uses AM and PM
+      if ! locale -ck LC_TIME | grep 'am_pm=";"' > /dev/null; then
+        TIME_FORMAT=" %-I:%M%p"
+      fi
+    fi
+
+    print -P "%D{$TIME_FORMAT}"
   fi
 }
 
-# Checks if working tree is dirty
-function parse_git_dirty() {
-  local STATUS=''
-  local -a FLAGS
-  FLAGS=('--porcelain')
-  if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
-    if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-      FLAGS+='--ignore-submodules=dirty'
+PROMPT+='%F{green}%B$(dracula_time_segment) '
+# }}}
+
+# User context segment {{{
+dracula_context() {
+  if (( DRACULA_DISPLAY_CONTEXT )); then
+    if [[ -n "${SSH_CONNECTION-}${SSH_CLIENT-}${SSH_TTY-}" ]] || (( EUID == 0 )); then
+      echo '%n@%m '
+    else
+      echo '%n '
     fi
-    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
-      FLAGS+='--untracked-files=no'
-    fi
-    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
   fi
-  if [[ -n $STATUS ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+}
+
+PROMPT+='%F{magenta}%B$(dracula_context)'
+# }}}
+
+# Directory segment {{{
+PROMPT+='%F{blue}%B%c '
+# }}}
+
+# Async git segment {{{
+
+dracula_git_status() {
+  cd "$1"
+  
+  local ref branch lockflag
+  
+  (( DRACULA_GIT_NOLOCK )) && lockflag="--no-optional-locks"
+
+  ref=$(=git $lockflag symbolic-ref --quiet HEAD 2>/tmp/git-errors)
+
+  case $? in
+    0)   ;;
+    128) return ;;
+    *)   ref=$(=git $lockflag rev-parse --short HEAD 2>/tmp/git-errors) || return ;;
+  esac
+
+  branch=${ref#refs/heads/}
+  
+  if [[ -n $branch ]]; then
+    echo -n "${ZSH_THEME_GIT_PROMPT_PREFIX}${branch}"
+
+    local git_status icon
+    git_status="$(LC_ALL=C =git $lockflag status 2>&1)"
+    
+    if [[ "$git_status" =~ 'new file:|deleted:|modified:|renamed:|Untracked files:' ]]; then
+      echo -n "$ZSH_THEME_GIT_PROMPT_DIRTY"
+    else
+      echo -n "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    fi
+
+    echo -n "$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  fi
+}
+
+dracula_git_callback() {
+  DRACULA_GIT_STATUS="$3"
+  zle && zle reset-prompt
+  async_stop_worker dracula_git_worker dracula_git_status "$(pwd)"
+}
+
+dracula_git_async() {
+  async_start_worker dracula_git_worker -n
+  async_register_callback dracula_git_worker dracula_git_callback
+  async_job dracula_git_worker dracula_git_status "$(pwd)"
+}
+
+add-zsh-hook precmd dracula_git_async
+
+PROMPT+='$DRACULA_GIT_STATUS'
+
+ZSH_THEME_GIT_PROMPT_CLEAN=") %F{green}%B✔ "
+ZSH_THEME_GIT_PROMPT_DIRTY=") %F{yellow}%B✗ "
+ZSH_THEME_GIT_PROMPT_PREFIX="%F{cyan}%B("
+ZSH_THEME_GIT_PROMPT_SUFFIX="%f%b"
+# }}}
+
+# ensure vi mode is handled by prompt
+function zle-keymap-select zle-line-init-dracula {
+  if [[ $KEYMAP = vicmd ]]; then
+    psvar[1]=vicmd
   else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    psvar[1]=''
   fi
-}
 
-# Gets the difference between the local and remote branches
-function git_remote_status() {
-    local remote ahead behind git_remote_status git_remote_status_detailed
-    remote=${$(command git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
-    if [[ -n ${remote} ]]; then
-        ahead=$(command git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
-        behind=$(command git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
-
-        if [[ $ahead -eq 0 ]] && [[ $behind -eq 0 ]]; then
-            git_remote_status="$ZSH_THEME_GIT_PROMPT_EQUAL_REMOTE"
-        elif [[ $ahead -gt 0 ]] && [[ $behind -eq 0 ]]; then
-            git_remote_status="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"
-            git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE$((ahead))%{$reset_color%}"
-        elif [[ $behind -gt 0 ]] && [[ $ahead -eq 0 ]]; then
-            git_remote_status="$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE"
-            git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE$((behind))%{$reset_color%}"
-        elif [[ $ahead -gt 0 ]] && [[ $behind -gt 0 ]]; then
-            git_remote_status="$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
-            git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE$((ahead))%{$reset_color%}$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE$((behind))%{$reset_color%}"
-        fi
-
-        if [[ -n $ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_DETAILED ]]; then
-            git_remote_status="$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_PREFIX$remote$git_remote_status_detailed$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_SUFFIX"
-        fi
-
-        echo $git_remote_status
-    fi
-}
-
-# Outputs the name of the current branch
-# Usage example: git pull origin $(git_current_branch)
-# Using '--quiet' with 'symbolic-ref' will not cause a fatal error (128) if
-# it's not a symbolic ref, but in a Git repo.
-function git_current_branch() {
-  local ref
-  ref=$(command git symbolic-ref --quiet HEAD 2> /dev/null)
-  local ret=$?
-  if [[ $ret != 0 ]]; then
-    [[ $ret == 128 ]] && return  # no git repo.
-    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
-  fi
-  echo ${ref#refs/heads/}
-}
-
-
-# Gets the number of commits ahead from remote
-function git_commits_ahead() {
-  if command git rev-parse --git-dir &>/dev/null; then
-    local commits="$(git rev-list --count @{upstream}..HEAD)"
-    if [[ "$commits" != 0 ]]; then
-      echo "$ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX$commits$ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX"
-    fi
-  fi
-}
-
-# Gets the number of commits behind remote
-function git_commits_behind() {
-  if command git rev-parse --git-dir &>/dev/null; then
-    local commits="$(git rev-list --count HEAD..@{upstream})"
-    if [[ "$commits" != 0 ]]; then
-      echo "$ZSH_THEME_GIT_COMMITS_BEHIND_PREFIX$commits$ZSH_THEME_GIT_COMMITS_BEHIND_SUFFIX"
-    fi
-  fi
-}
-
-# Outputs if current branch is ahead of remote
-function git_prompt_ahead() {
-  if [[ -n "$(command git rev-list origin/$(git_current_branch)..HEAD 2> /dev/null)" ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
-  fi
-}
-
-# Outputs if current branch is behind remote
-function git_prompt_behind() {
-  if [[ -n "$(command git rev-list HEAD..origin/$(git_current_branch) 2> /dev/null)" ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_BEHIND"
-  fi
-}
-
-# Outputs if current branch exists on remote or not
-function git_prompt_remote() {
-  if [[ -n "$(command git show-ref origin/$(git_current_branch) 2> /dev/null)" ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_REMOTE_EXISTS"
-  else
-    echo "$ZSH_THEME_GIT_PROMPT_REMOTE_MISSING"
-  fi
-}
-
-# Formats prompt string for current git commit short SHA
-function git_prompt_short_sha() {
-  local SHA
-  SHA=$(command git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
-}
-
-# Formats prompt string for current git commit long SHA
-function git_prompt_long_sha() {
-  local SHA
-  SHA=$(command git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
-}
-
-# Get the status of the working tree
-function git_prompt_status() {
-  local INDEX STATUS
-  INDEX=$(command git status --porcelain -b 2> /dev/null)
-  STATUS=""
-  if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  fi
-  if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^## [^ ]\+ .*ahead' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^## [^ ]\+ .*behind' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^## [^ ]\+ .*diverged' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
-  fi
-  echo $STATUS
-}
-
-# Compares the provided version of git to the version installed and on path
-# Outputs -1, 0, or 1 if the installed version is less than, equal to, or
-# greater than the input version, respectively.
-function git_compare_version() {
-  local INPUT_GIT_VERSION INSTALLED_GIT_VERSION
-  INPUT_GIT_VERSION=(${(s/./)1})
-  INSTALLED_GIT_VERSION=($(command git --version 2>/dev/null))
-  INSTALLED_GIT_VERSION=(${(s/./)INSTALLED_GIT_VERSION[3]})
-
-  for i in {1..3}; do
-    if [[ $INSTALLED_GIT_VERSION[$i] -gt $INPUT_GIT_VERSION[$i] ]]; then
-      echo 1
-      return 0
-    fi
-    if [[ $INSTALLED_GIT_VERSION[$i] -lt $INPUT_GIT_VERSION[$i] ]]; then
-      echo -1
-      return 0
-    fi
-  done
-  echo 0
-}
-
-# Outputs the name of the current user
-# Usage example: $(git_current_user_name)
-function git_current_user_name() {
-  command git config user.name 2>/dev/null
-}
-
-# Outputs the email of the current user
-# Usage example: $(git_current_user_email)
-function git_current_user_email() {
-  command git config user.email 2>/dev/null
-}
-
-# This is unlikely to change so make it all statically assigned
-POST_1_7_2_GIT=$(git_compare_version "1.7.2")
-# Clean up the namespace slightly by removing the checker function
-unfunction git_compare_version
-
-
-local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
-
-PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg_bold[blue]%}%c $(git_prompt_info)% %{$reset_color%}$(kubeaware_prompt)'
-
-ZSH_THEME_GIT_PROMPT_CLEAN=") %{$fg_bold[green]%}✔ "
-ZSH_THEME_GIT_PROMPT_DIRTY=") %{$fg_bold[yellow]%}✗ "
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[cyan]%}("
-SH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-
-# Updates editor information when the keymap changes.
-function zle-keymap-select() {
   zle reset-prompt
   zle -R
 }
 
+zle -N zle-line-init-dracula
 zle -N zle-keymap-select
 
-function vi_mode_prompt_info() {
-  echo "${${KEYMAP/vicmd/[% NORMAL]%}/(main|viins)/[% INSERT]%}"
-}
+# Ensure effects are reset
+PROMPT+='%f%b'
 
-# define right prompt, regardless of whether the theme defined it
-RPS1='$(vi_mode_prompt_info)'
-RPS2=$RPS1

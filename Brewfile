@@ -60,7 +60,6 @@ brew 'nano'
 
 # File compression/uncompression
 brew 'zstd'
-brew 'unrar'
 brew 'unzip'
 
 # file synchronizer.
@@ -84,7 +83,6 @@ brew 'base64'
 cask 'slack'
 brew 'kubectl'
 brew 'kubectx' 
-tap 'boz/repo'
 brew 'boz/repo/kail'
 brew 'dep'
 brew 'repo'
@@ -92,3 +90,5 @@ brew 'npm'
 brew 'nvm'
 brew 'kube-ps1'
 cask 'google-cloud-sdk'
+cask 'google-chrome'
+brew "zplug"

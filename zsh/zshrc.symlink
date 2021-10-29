@@ -21,7 +21,6 @@ for file in ${(M)config_files:#*/path.zsh}
 do
   source $file
 done
-
 # load everything but the path and completion files
 for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
 do
@@ -31,6 +30,7 @@ done
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
 compinit
+echo 4
 
 # load every completion after autocomplete loads
 for file in ${(M)config_files:#*/completion.zsh}
@@ -69,17 +69,8 @@ bindkey -M vicmd "^V" edit-command-line
 export KEYTIMEOUT=1
 
 # Auto history
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/giaocung/.sdkman"
-[[ -s "/Users/giaocung/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/giaocung/.sdkman/bin/sdkman-init.sh"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/giaocung/Downloads/google-cloud-sdk 2/path.zsh.inc' ]; then . '/Users/giaocung/Downloads/google-cloud-sdk 2/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/giaocung/Downloads/google-cloud-sdk 2/completion.zsh.inc' ]; then . '/Users/giaocung/Downloads/google-cloud-sdk 2/completion.zsh.inc'; fi
+#source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+#
+#
 
 
-. /usr/local/opt/asdf/asdf.sh

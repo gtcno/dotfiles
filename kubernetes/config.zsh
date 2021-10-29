@@ -1,4 +1,4 @@
-export KUBECONFIG=/Users/giaocung/dev/sandboxes/kubeconfigs/config
+export KUBECONFIG=/Users/giacung/dev/sandboxes/kubeconfigs/config
 export KUBE_EDITOR="vim"
 export PATH="${PATH}:${HOME}/.krew/bin"
 
