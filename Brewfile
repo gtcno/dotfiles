@@ -14,6 +14,7 @@ brew 'zsh'
 
 # Editors
 brew 'vim'
+cask 'intellij-idea'
 #cask 'macvim'
 #cask 'emacs'
 #cask 'sublime-text'
@@ -45,6 +46,8 @@ brew 'gnutls'
 brew 'gzip'
 brew 'watch'
 brew 'wdiff'
+brew 'rg'
+brew 'ag'
 
 ##
 # Some GNU command line tools already exist by default on OS X.
@@ -81,6 +84,7 @@ brew 'jq'
 ## Uncategorized
 brew 'base64'
 cask 'slack'
+cask 'zoom'
 brew 'kubectl'
 brew 'kubectx' 
 brew 'boz/repo/kail'
@@ -90,5 +94,9 @@ brew 'npm'
 brew 'nvm'
 brew 'kube-ps1'
 cask 'google-cloud-sdk'
-cask 'google-chrome'
 brew "zplug"
+brew "asdf"
+cask "naisdevice"
+brew "fzf"
+brew "maven"
+cask "karabiner-elements"

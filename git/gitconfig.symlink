@@ -39,3 +39,11 @@
     proxy = socks5://localhost:14122
 [credential]
 	helper = osxkeychain
+[init]
+	templatedir = ~/.git-templates
+[iniit]
+	defaultBranch = main
+[gpg]
+	program = gpg
+[user]
+	signingkey = 007D5046448141FE
