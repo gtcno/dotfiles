@@ -79,7 +79,7 @@ brew 'jq'
 #brew 'docker-machine-driver-xhyve'
 #cask 'osxfuse'
 #brew 'sshfs'
-
+brew 'colima'
 
 ## Uncategorized
 brew 'base64'
@@ -99,4 +99,3 @@ brew "asdf"
 cask "naisdevice"
 brew "fzf"
 brew "maven"
-cask "karabiner-elements"

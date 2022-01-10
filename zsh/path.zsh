@@ -1,1 +1,1 @@
-export PATH="$HOME/bin:$PATH":/Users/giacung/dev/sandboxes/dagpenger-iac/postgres-gcp
+export PATH="$HOME/bin:$PATH":/Users/giaocung/dev/sandboxes/dagpenger-iac/postgres-gcp

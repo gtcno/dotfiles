@@ -61,6 +61,8 @@ bindkey -M vicmd '/' history-incremental-search-forward
 bindkey -M vicmd "k" up-line-or-beginning-search
 bindkey -M vicmd "j" down-line-or-beginning-search
 
+bindkey "ç" fzf-cd-widget
+
 # Easier, more vim-like editor opening
 # `v` is already mapped to visual mode, so we need to use a different key to
 # open Vim
@@ -73,8 +75,8 @@ export KEYTIMEOUT=1
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/dev/fzf-tab/fzf-tab.zsh ] && source ~/dev/fzf-tab/fzf-tab.zsh
 
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"

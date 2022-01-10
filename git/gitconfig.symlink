@@ -46,4 +46,6 @@
 [gpg]
 	program = gpg
 [user]
-	signingkey = 007D5046448141FE
+	signingkey = 2A917FCEAF84DE21A53DBC8E64624CDA566398A8
+[commit]
+	gpgSign = true
