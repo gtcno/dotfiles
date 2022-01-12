@@ -49,3 +49,5 @@
 	signingkey = 2A917FCEAF84DE21A53DBC8E64624CDA566398A8
 [commit]
 	gpgSign = true
+[credential "https://github.com"]
+	helper = !gh auth git-credential
