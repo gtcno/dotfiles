@@ -41,6 +41,7 @@
 	helper = osxkeychain
 [init]
 	templatedir = ~/.git-templates
+	defaultBranch = main
 [iniit]
 	defaultBranch = main
 [gpg]
