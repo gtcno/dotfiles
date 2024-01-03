@@ -1,0 +1,31 @@
+#!/bin/zsh
+
+set -o pipefail
+[[ "${DEBUG}" == 'true' ]] && set -o xtrace
+
+check_status() {
+  local bw_status
+  local user
+  local password
+  local session
+  bw_status=$(bw status | jq -r ".status")
+
+  if [[ $bw_status == "unauthenticated" ]]; then
+    echo "******* Not logged in *********"
+    echo -n "Enter user: "
+    read -r user
+    echo -n "Enter password: "
+    read -r -s password
+    session=$(bw login "$user" "$password" --quiet --raw)
+    export BW_SESSION=$session
+  elif [[ $bw_status == "locked" ]]; then
+    echo "******* Vault Locked *********"
+    echo -n "Enter password: "
+    read -r -s password
+    session=$(bw unlock "$password"  --raw)
+    export BW_SESSION=$session
+  else
+    echo "******* Unknown status: $bw_status *********"
+    exit 1
+  fi
+}

@@ -17,6 +17,8 @@
 [core]
         excludesfile = ~/.gitignore
         editor = vim
+	precomposeunicode = true
+	quotePath = false
 [apply]
         whitespace = nowarn
 [mergetool]
@@ -31,6 +33,7 @@
         #
         # Setting to git 2.0 default to suppress warning message
         default = simple
+	autoSetupRemote = true
 [cola]
 	spellcheck = false
 [http "https://stash.adeo.no"]
@@ -47,8 +50,11 @@
 [gpg]
 	program = gpg
 [user]
-	signingkey = 2A917FCEAF84DE21A53DBC8E64624CDA566398A8
+	signingkey = 22E149CB9A818504
 [commit]
 	gpgSign = true
+	template = /Users/giaocung/.gitmessage
 [credential "https://github.com"]
 	helper = !gh auth git-credential
+[git-mob]
+	co-author = Mona Kjeldsrud <mona.kjeldsrud@nav.no>

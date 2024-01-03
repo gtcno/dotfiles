@@ -1,0 +1,30 @@
+#!/bin/bash
+
+check_session() {
+    # Check if Bitwarden session is already set up
+    if ! bw status > /dev/null; then
+        # If session is not set up, prompt the user to log in
+        bw login
+    fi
+}
+
+setup_session() {
+    # Set up Bitwarden session
+    bw unlock
+}
+
+# Check and set up Bitwarden session
+check_session
+
+# Get Bitwarden items as JSON and filter with FZF
+ITEM=$(bw list items --pretty --search "" | fzf --height 50% --ansi)
+
+# Extract item ID and password from JSON
+ID=$(echo "$ITEM" | jq -r ".id")
+PASSWORD=$(echo "$ITEM" | jq -r ".login.password")
+
+# Copy password to clipboard
+echo "$PASSWORD" | pbcopy
+
+# Display a message indicating success
+echo "Password copied to clipboard for item ID $ID"
