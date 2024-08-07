@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Check if the correct number of arguments is provided
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 <app-label> <url-path>"
+  exit 1
+fi
+
+APP_LABEL="$1"
+URL_PATH="$2"
+
+# Get the pod name based on the application label
+POD_NAME=$(kubectl get pods -l app=$APP_LABEL -o jsonpath="{.items[0].metadata.name}")
+
+# Check if POD_NAME is empty
+if [ -z "$POD_NAME" ]; then
+  echo "No pod found with the label app=$APP_LABEL"
+  exit 1
+fi
+
+LOCAL_PORT=8080
+POD_PORT=8080
+
+# Start port-forwarding
+kubectl port-forward pod/$POD_NAME $LOCAL_PORT:$POD_PORT >/dev/null 2>&1 &
+PF_PID=$!
+
+# Wait for port-forwarding to set up
+sleep 2
+
+# Make the API request
+curl http://localhost:$LOCAL_PORT$URL_PATH
+
+# Clean up port-forwarding
+kill $PF_PID

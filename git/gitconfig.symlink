@@ -57,3 +57,6 @@
 	template = /Users/giaocung/.gitmessage
 [credential "https://github.com"]
 	helper = !gh auth git-credential
+[git-mob]
+	co-author = Aurora Christine Hofman <aurora.christine.hofman@nav.no>
+	co-author = MariusEriksen <Marius.Eriksen@nav.no>
