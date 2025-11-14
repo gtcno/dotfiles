@@ -51,12 +51,9 @@
 [gpg]
 	program = gpg
 [user]
-	signingkey = 22E149CB9A818504
+	signingkey = F1318F1FF29D8E80A6DCF6501DAFE7AD5C0A89DF
 [commit]
 	gpgSign = true
 	template = /Users/giaocung/.gitmessage
 [credential "https://github.com"]
 	helper = !gh auth git-credential
-[git-mob]
-	co-author = Aurora Christine Hofman <aurora.christine.hofman@nav.no>
-	co-author = MariusEriksen <Marius.Eriksen@nav.no>

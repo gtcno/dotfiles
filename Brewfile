@@ -11,7 +11,7 @@ brew 'tmux'
 brew 'bash'
 brew 'bash-completion'
 brew 'zsh'
-
+cask 'ghostty'
 # Editors
 brew 'vim'
 cask 'intellij-idea'

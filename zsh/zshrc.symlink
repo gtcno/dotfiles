@@ -90,7 +90,7 @@ hedo() {
         echo "I Have The Power"
     else
         echo "By The Power Of Greyskull"
-        /Applications/Privileges.app/Contents/Resources/PrivilegesCLI --add
+	/Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --add
         echo "I Have The Power"
     fi
 }
