@@ -57,3 +57,5 @@
 	template = /Users/giaocung/.gitmessage
 [credential "https://github.com"]
 	helper = !gh auth git-credential
+[git-mob]
+	co-author = Mona Kjeldsrud <mona.kjeldsrud@nav.no>

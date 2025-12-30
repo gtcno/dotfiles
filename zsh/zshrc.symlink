@@ -94,3 +94,4 @@ hedo() {
         echo "I Have The Power"
     fi
 }
+export PATH="$HOME/.local/bin:$PATH"
