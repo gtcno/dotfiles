@@ -9,6 +9,9 @@
         wtf     = !$ZSH/bin/git-wtf
         rank-contributors = !$ZSH/bin/git-rank-contributors
         count   = !git shortlog -sn
+        sl = stash list
+        ss = "!f() { git stash show -p stash@{${1:-0}}; }; f"
+        sa = "!f() { git stash apply stash@{${1:-0}}; }; f"
 [color]
         diff = auto
         status = auto
